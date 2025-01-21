@@ -1,0 +1,46 @@
+simpleType::
+_1 |-->_1
+
+identifier::
+_1 |-->_1
+
+recordType::
+_* |-->_*
+
+typeIdentifier::
+_1 |-->_1
+
+recordSection::
+_* |-->_*
+
+fieldList::
+_1 |-->_1
+_* |-->_*
+
+type_::
+_1 |-->_1
+
+
+
+subruleset5::
+record _2 end  |-->_2`subSourceF4
+
+seq2subruleset3::
+; |-->
+_1 : _3  |--> attribute _1 : _3`subruleset2 ; 
+_0 |-->_0
+
+subruleset2::
+_1  |-->_1`subSourceF1
+
+subSourceF1::
+_1 |-->_1
+
+typeDefinition::
+_1 = _3  |-->class _1 { _3`subruleset5 } 
+
+subSourceF4::
+_* |-->_*`seq2subruleset3
+
+
+

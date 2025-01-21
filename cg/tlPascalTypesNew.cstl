@@ -1,0 +1,111 @@
+simpleType::
+_1 |-->_1
+
+componentType::
+_1 |-->_1
+
+indexType::
+_1 |-->_1
+
+constant::
+_1 |-->_1
+
+typeList::
+_1 |-->_1
+
+subrangeType::
+_* |-->_*
+
+structuredType::
+_1 |-->_1
+
+unpackedStructuredType::
+_1 |-->_1
+
+type_::
+_1 |-->_1
+
+baseType::
+_1 |-->_1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+subruleset4::
+_1  |-->_1`subSourceF3
+
+identifier::
+Integer |-->int
+Boolean |-->boolean
+_* |-->int
+
+arrayType::
+array [ _3 ] of _6  |-->Map ( String , _6`subruleset7 ) 
+
+pointerType::
+^ _2  |-->Ref ( _2 ) 
+
+setType::
+set of _3  |-->Set ( _3`subruleset4 ) 
+
+subSourceF3::
+_1 |-->_1`nestedSfunc2
+
+nestedSfunc2::
+integer |-->int
+real |-->double
+_1 |-->_1
+_* |-->int
+
+typeIdentifier::
+integer |-->int
+real |-->double
+Real |-->double
+string |-->String
+_1 |-->_1
+_* |-->double
+
+nestedSfunc1::
+Integer |-->int
+Boolean |-->boolean
+_* |-->int
+
+nestedSfunc0::
+integer |-->int
+real |-->double
+Real |-->double
+string |-->String
+_1 |-->_1
+_* |-->double
+
+subSourceF6::
+_1 |-->_1`nestedSfunc5
+
+nestedSfunc5::
+integer |-->int
+real |-->double
+_1 |-->_1
+_* |-->int
+
+subruleset7::
+_1  |-->_1`subSourceF6
+
+fileType::
+file of _3  |-->OclFile 
+
+
+

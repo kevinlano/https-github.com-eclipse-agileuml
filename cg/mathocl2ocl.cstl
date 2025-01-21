@@ -1,0 +1,1045 @@
+/* This translates MathOCL to UML/OCL */
+
+specification::
+specification _1 _* <EOF> |-->class _1 {_*`definesToAttributes_* }
+specification _1 _* |-->class _1 {_*`definesToAttributes_* }
+
+
+part::
+_1 |-->_1\n
+
+
+constraint::
+Constraint on _1 | _2 |-->\n  invariant _2;\n
+
+theorem::
+Theorem _1 when _2 |-->
+
+rewrite::
+Rewrite _1 to _2 |-->
+
+
+prove::
+Prove _1 if _2 |-->\n  invariant _2 => _1;\n
+
+
+simplify::
+Simplify _1 |-->\n  invariant _1;\n
+
+
+expanding::
+Expanding _1 to 1 |-->\n  invariant _1 = _1`maclaurenTerm1
+Expanding _1 to 2 |-->\n  invariant _1 = (_1`maclaurenTerm1 + x*_1`maclaurenTerm2);\n
+Expanding _1 to 3 |-->\n  invariant _1 = (_1`maclaurenTerm1 + x*_1`maclaurenTerm2 + x*x*_1`maclaurenTerm3/2);\n
+Expanding _1 to 4 |-->\n  invariant _1 = (_1`maclaurenTerm1 + x*_1`maclaurenTerm2 + x*x*_1`maclaurenTerm3/2 + x*x*x*_1`maclaurenTerm4/6);\n
+
+
+expandTo::
+Expand _1 to 1 terms |-->_1`maclaurenTerm1
+Expand _1 to 2 terms |-->_1`maclaurenTerm1 + x*_1`maclaurenTerm2
+Expand _1 to 3 terms |-->_1`maclaurenTerm1 + x*_1`maclaurenTerm2 + x*x*_1`maclaurenTerm3/2
+Expand _1 to 4 terms |-->_1`maclaurenTerm1 + x*_1`maclaurenTerm2 + x*x*_1`maclaurenTerm3/2 + x*x*x*_1`maclaurenTerm4/6
+
+
+
+
+maclaurenTerm1::
+_1 |-->_1<action> 0 / x
+
+
+maclaurenTerm2::
+_1 |-->_1`differentiate<action> 0 / x
+
+
+maclaurenTerm3::
+_1 |-->_1`diff2<action> 0 / x
+
+maclaurenTerm4::
+_1 |-->_1`diff3<action> 0 / x
+
+
+
+substituting::
+Substitute _1 for _2 in _3 |-->\n  invariant _3;\n<action> _1 / _2
+
+expressAs::
+Express _1 as polynomial in _2 |-->
+
+
+solve::
+Solve _* for _+ |-->
+
+
+
+formula::
+Define _1 |-->
+Define _1 = _2 |-->\n\n  operation _1`operationName(_1`operationParameters) : double\n  pre: true\n  post: result = _2;
+Define _1 ~ _2 |-->
+Define _1 : _2 |-->
+Define _1 : _2 = _3 |-->\n\n  operation _1`operationName(_1`operationParameters) : _2\n  pre: true\n  post: result = _3;
+
+
+factorBy::
+Factor _1 by _2 |-->_2*(_1`divideBy)<action> _90 _2
+
+cancelIn::
+Cancel _1 in _2 |-->_2`cancel<action> _90 _1
+
+substituteIn::
+Substitute _1 in _2 |-->_2<when> _2 expression
+Substitute _1 in _2 |-->
+
+groupBy::
+Group _1 by _2 |-->_1
+
+
+
+
+definesToAttributes::
+Define _1 = _2 |-->\n  attribute _1 : double := _2;<when> _1`isIdentifier true
+Define _1 |-->\n  attribute _1 : double;
+Define _1 ~ _2 |-->\n  attribute _1 : OclRandom := OclRandom.newOclRandom_2`randomParameters; 
+Define _1 : _2 |-->\n  attribute _1 : _2;
+Define _1 : _2 = _3 |-->\n  attribute _1 : _2 := _3;<when> _1`isIdentifier true
+
+_1 |-->_1`definesToAttributes<when> _1 formula
+Constraint on _1 | _2 |-->
+Prove _1 if _2 |-->
+Expanding _1 to _2 |--> 
+Substitute _1 for _2 in _3 |-->
+Solve _* for _+ |-->
+Express _1 as _2 |-->
+_1 |-->
+_1 _* |-->
+
+
+idList::
+_1 |-->_1
+_1 , _* |-->_1,_*`recurse
+
+
+type::
+Sequence ( _1 ) |-->Sequence(_1)  
+Set ( _1 ) |-->Set(_1)  
+OrderedSet ( _1 ) |-->OrderedSet(_1)  
+Bag ( _1 ) |-->Bag(_1)  
+Map ( _1 , _2 ) |-->Map(_1,_2) 
+Function ( _1 , _2 ) |-->Function(_1,_2) 
+Ñ |-->int
+Ž |-->int
+® |-->double
+Date |-->OclDate
+_1 |-->_1
+
+
+expression::
+_1 |-->_1
+
+
+expressionList::
+_1 |-->_1
+_1 , _* |-->_1,_*`recurse
+
+
+conditionalExpression::
+if true then _1 else _2 endif |-->_1
+if false then _1 else _2 endif |-->_2
+
+if _1 then _2 else _2 endif |-->_2
+
+if _1 then _2 else _3 endif |-->(if _1 then _2 else _3 endif)
+
+
+logicalExpression::
+_1 & _1 |-->_1
+_1 & false |-->false
+_1 & true |-->_1
+false & _1 |-->false
+true & _1 |-->_1
+_1 & _2 |-->_1 & _2
+
+_1 or _1 |-->_1
+_1 or false |-->_1
+_1 or true |-->true
+false or _1 |-->_1
+true or _1 |-->true
+_1 or _2 |-->_1 or _2
+
+_1 => _1 |-->true
+false => _1 |-->true
+_1 => true |-->true
+_1 => false |-->not(_1)
+_1 => _2 |-->_1 => _2
+
+£ _1 : _2 • true |-->true
+£ _1 : _2 • false |-->false
+£ _1 : _2 • _3 |-->_2->exists( _1 | _3 )
+
+¡ _1 : _2 • _3 |-->_2->forAll( _1 | _3 )
+
+_1 _2 _3 |-->_1 _2 _3
+
+not true |-->false
+not false |-->true
+not _1 |-->not _1
+
+_1 |-->_1
+
+
+equalityExpression::
+_1 = _1 |-->true
+_1 = _2 |-->_1 = _2
+_1 /= _1 |-->false
+_1 /= _2 |-->_1 /= _2
+_1 < _1 |-->false
+_1 < _2 |-->_1 < _2
+_1 > _1 |-->false
+_1 > _2 |-->_1 > _2
+_1 <= _1 |-->true
+_1 <= _2 |-->_1 <= _2
+_1 >= _1 |-->true
+_1 >= _2 |-->_1 >= _2
+
+_1 © Ø |-->false
+_1 ¢ Ø |-->true
+
+_1 © _2 |-->(_2)->includes(_1)
+_1 ¢ _2 |-->(_2)->excludes(_1)
+
+_1 _2 _3 |-->_1 _2 _3
+_1 |-->_1
+
+
+additiveExpression::
+_1 + _2 |-->_1 + _2
+_1 - _2 |-->_1 - _2
+
+_1 _2 _3 |-->_1 _2 _3
+_1 |-->_1
+
+
+factorExpression::
+_1 * _2 |-->_1*_2
+
+_1 / _2 |-->_1/_2
+
+- 0 |-->0
+- 0.0 |-->0
+- … |-->Math_NINFINITY
+- _1 |-->_1`negate
+
+0 ! |-->1
+1 ! |-->1
+_1 ! |-->MathLib.factorial(_1)
+
+_1 ´ |-->_1`differentiate
+
+
+† 0 |-->0
+† 1 |-->1
+† _1 |-->_1->sqrt()
+
+‡ _1 _2 |-->_1*_2`tail<when> _1 integer
+‡ _1 _2 |-->_1*_2`tail<when> _1 real
+‡ _1 dx |-->_1`integrate
+‡ _1 _2 |-->‡ _1 _2
+
+‡ _{ _1 } ^{ _2 } _3 _4 |-->_3*(_2 - _1)<when> _3 integer
+‡ _{ _1 } ^{ _2 } _3 _4 |-->_3*(_2 - _1)<when> _3 real
+
+‡ _{ _1 } ^{ _2 } x dx |-->(_2->pow(2)/2.0) - (_1->pow(2)/2.0)
+‡ _{ _1 } ^{ _2 } _3 _4 |-->MathLib.definiteIntegral(_1, _2, lambda _4`tail : double in _3) 
+
+€ _{ _1 } ^{ _2 } _3 |-->_3*(_2 - _1`rhs + 1)<when> _3 integer
+€ _{ _1 } ^{ _2 } _3 |-->_3*(_2 - _1`rhs + 1)<when> _3 real
+€ _{ _1 } ^{ _2 } _3 |-->Integer.Sum(_1`rhs,_2,_1`lhs,_3)
+
+× _{ _1 } ^{ _2 } _3 |-->(_3)->pow(_2 - _1`rhs + 1)<when> _3 integer
+× _{ _1 } ^{ _2 } _3 |-->(_3)->pow(_2 - _1`rhs + 1)<when> _3 real
+× _{ _1 } ^{ _2 } _3 |-->Integer.Prd(_1`rhs,_2,_1`lhs,_3)
+
+C_{ 0 } ^{ _1 } |-->1
+C_{ _1 } ^{ _1 } |-->1
+C_{ 1 } ^{ _1 } |-->_1
+C_{ _1 } ^{ _2 } |-->MathLib.combinatorial(_2,_1)
+ 
+lim_{ _1 » _2 } _1 |-->_2
+lim_{ _1 » _2 } _3 |-->_3<when> _3 real
+lim_{ _1 » _2 } _3 |-->Real.limit(_1,_2,_3)
+
+E[ _1 ] |-->_1.mean()
+
+_1 |-->_1
+
+
+factor2Expression::
+_1 ^{ 1 } |-->_1
+1 ^{ _1 } |-->1
+_1 ^{ 0 } |-->1
+0 ^{ 2 } |-->0
+0 ^{ 3 } |-->0
+
+e ^{ _1 } |-->MathLib.eValue()->pow(_1)
+
+_1 ^{ _2 } |-->_1->pow(_2)
+
+_1 _{ _2 } |-->_1[_2]
+
+_1 _2 |-->_1_2
+
+_1 |-->_1
+
+
+basicExpression::
+e |-->MathLib.eValue()
+0.0 |-->0
+1.0 |-->1
+
+? |-->Math_NaN
+Ø |-->Set{}
+… |-->Math_PINFINITY
+
+g{ p } |-->MathLib.piValue()
+g{ a } |-->alpha
+g{ b } |-->beta
+g{ c } |-->chi
+g{ g } |-->gamma
+g{ d } |-->delta
+g{ e } |-->epsilon
+g{ f } |-->theta
+g{ k } |-->kappa
+g{ m } |-->mu
+g{ n } |-->nu
+g{ o } |-->omega
+g{ s } |-->sigma
+g{ r } |-->rho
+g{ t } |-->tau
+g{ z } |-->zeta
+g{ _1 } |-->_1_Greek
+
+sin ( 0 ) |-->0
+cos ( 0 ) |-->1
+tan ( 0 ) |-->0
+exp ( 0 ) |-->1
+log ( 1 ) |-->0
+log ( e ) |-->1
+cosh ( 0 ) |-->1
+sinh ( 0 ) |-->0
+tanh ( 0 ) |-->0
+sech ( 0 ) |-->1
+
+cosec ( _1 ) |-->(1.0/((_1)->sin()))
+sec ( _1 ) |-->(1.0/((_1)->cos()))
+cot ( _1 ) |-->(1.0/((_1)->tan()))
+
+acosec ( _1 ) |-->(1.0/_1)->asin()
+asec ( _1 ) |-->(1.0/_1)->acos()
+acot ( _1 ) |-->(1.0/_1)->atan()
+
+cosech ( _1 ) |-->(1.0/((_1)->sinh()))
+sech ( _1 ) |-->(1.0/((_1)->cosh()))
+coth ( _1 ) |-->(1.0/((_1)->tanh()))
+
+acosech ( _1 ) |-->MathLib.asinh(1.0/_1)
+asech ( _1 ) |-->MathLib.acosh(1.0/_1)
+acoth ( _1 ) |-->MathLib.atanh(1.0/_1)
+
+sin ( _1 ) |-->(_1)->sin()
+cos ( _1 ) |-->(_1)->cos()
+tan ( _1 ) |-->(_1)->tan()
+
+asin ( _1 ) |-->(_1)->asin()
+acos ( _1 ) |-->(_1)->acos()
+atan ( _1 ) |-->(_1)->atan()
+
+sinh ( _1 ) |-->(_1)->sinh()
+cosh ( _1 ) |-->(_1)->cosh()
+tanh ( _1 ) |-->(_1)->tanh()
+
+asinh ( _1 ) |-->MathLib.asinh(_1)
+acosh ( _1 ) |-->MathLib.acosh(_1)
+atanh ( _1 ) |-->MathLib.atanh(_1)
+
+exp ( _1 ) |-->MathLib.eValue()->pow(_1)
+log ( _1 ) |-->(_1)->log()
+log10 ( _1 ) |-->(_1)->log10()
+
+ceil ( _1 ) |-->(_1)->ceil()
+floor ( _1 ) |-->(_1)->floor()
+round ( _1 ) |-->(_1)->round()
+
+min ( _1 ) |-->(_1)->min()
+max ( _1 ) |-->(_1)->max()
+
+var ( _1 ) |-->_1.variance()
+
+len ( _1 ) |-->(_1)->size()
+
+Date ( _1 ) |-->OclDate.newOclDate_String(_1)
+Time ( _1 ) |-->OclDate.newOclDate_Time(_1)
+
+accumulatedInterest ( _1 ) |-->FinanceLib.accumulatedInterest(_1)
+Binomial ( _1 ) |-->Excel.Binom_Dist_Range(_1`third,_1`last,_1`first,_1`third)
+bondPrice ( _1 ) |-->FinanceLib.bondPrice(_1)
+bondPriceClean ( _1 ) |-->FinanceLib.bondPriceClean(_1)
+
+determinant ( _1 ) |-->MatrixLib.determinant(_1)
+
+_1 ( _2 ) |-->_1(_2)
+_1 ( ) |-->_1()
+
+
+( true ) |-->true
+( false ) |-->false
+( x ) |-->x
+( _1 ) |-->_1<when> _1 integer
+( _1 ) |-->_1<when> _1 real
+( _1 ) |-->_1<when> _1`isIdentifier true
+( _1 ) |-->_1<when> _1`bracketed true
+( _1 ) |-->(_1)
+
+_1 [ _2 ] |-->_1[_2]
+
+_1 . _2 |-->_1._2
+
+_1 |-->_1
+
+
+operationName::
+_1 ( ) |-->_1
+_1 ( _2 ) |-->_1
+_1 |-->_1Definition
+
+operationParameters::
+_1 ( ) |-->
+_1 ( _2 ) |-->_2`parameterDeclarations
+_1 |-->
+
+parameterDeclarations::
+_1 |-->_1 : double
+_1 , _* |-->_1 : double, _*`recurse
+
+
+setExpression::
+{ _1 : _2 | _3 } |-->_2->select( _1 | _3 )
+{ _1 : _2 | _3 • _4 } |-->_2->select( _1 | _3 )->collect( _1 | _4)
+  
+Set{ } |-->Set{}
+Set{ _1 } |-->Set{_1}
+
+Sequence{ } |-->Sequence{}
+Sequence{ _1 } |-->Sequence{_1}
+
+
+identifier::
+_1 |-->_1
+
+
+
+negate::
+0.0 |-->0
+1.0 |-->-1
+
+- _1 |-->_1
++ _1 |-->_1`negate
+_1 - _2 |-->(_2 - (_1))
+_1 + _2 |-->(_1`negate - (_2))
+
+_1 * -1 |-->_1
+-1 * _1 |-->_1
+_1 * 1 |-->_1`negate
+1 * _1 |-->_1`negate
+_1 * _2 |-->(_1`negate)*_2
+
+_1 / 1 |-->_1`negate
+_1 / -1 |-->_1
+-1 / _2 |-->(1/_2)
+1 / _2 |-->(1/(_2`negate))
+_1 / _2 |-->((_1`negate)/_2)
+
+_1 ^{ _2 } |-->-(_1->pow(_2))
+
+Ð _{ _1 } _2 |-->-MathLib.differential(lambda _1 : double in _2)
+_1 ´ |-->-(_1`differentiate)
+
+† _1 |-->-(_1->sqrt())
+
+‡ _1 _2 |-->-(_1*_2`tail)<when> _1 integer
+‡ _1 _2 |-->-(_1*_2`tail)<when> _1 real
+‡ _1 dx |-->-(_1`integrate)
+‡ _1 _2 |-->‡ _1`negate _2
+
+‡ _{ _1 } ^{ _2 } _3 _4 |-->MathLib.definiteIntegral(_1, _2, lambda _4`tail : double in (3`negate)) 
+
+€ _{ _1 } ^{ _2 } _3 |-->_3*(_1 - _2 - 1)<when> _3 integer
+€ _{ _1 } ^{ _2 } _3 |-->_3*(_1 - _2 - 1)<when> _3 real
+€ _{ _1 } ^{ _2 } _3 |-->-Integer.Sum(_1`rhs,_2,_1`lhs,_3)
+
+× _{ _1 } ^{ _2 } _3 |-->-((_3)->pow(_2 - _1 + 1))<when> _3 integer
+× _{ _1 } ^{ _2 } _3 |-->-((_3)->pow(_2 - _1 + 1))<when> _3 real
+× _{ _1 } ^{ _2 } _3 |-->-Integer.Prd(_1`rhs,_2,_1`lhs,_3)
+
+C_{ 0 } ^{ _1 } |-->-1
+C_{ _1 } ^{ _1 } |-->-1
+C_{ 1 } ^{ _1 } |-->-(_1)
+C_{ _1 } ^{ _2 } |-->-MathLib.combinatorial(_2,_1)
+
+( _1 ) |-->_1`negate
+
+sin ( 0 ) |-->0
+cos ( 0 ) |-->-1
+tan ( 0 ) |-->0
+exp ( 0 ) |-->-1
+log ( 1 ) |-->0
+log ( e ) |-->-1
+cosh ( 0 ) |-->-1
+sinh ( 0 ) |-->0
+tanh ( 0 ) |-->0
+sec ( 0 ) |-->-1
+sech ( 0 ) |-->-1
+_1 ( _2 ) |-->-_1(_2)
+
+_1 |-->_1`negate<when> _1 basicExpression
+_1 |-->_1`negate<when> _1 factorExpression
+_1 |-->_1`negate<when> _1 factor2Expression
+_1 |-->_1`negate<when> _1 logicalExpression
+_1 |-->_1`negate<when> _1 equalityExpression
+_1 |-->_1`negate<when> _1 additiveExpression
+_1 |-->_1`negate<when> _1 expression
+_1 |-->-_1
+
+
+
+rhs::
+_1 = _2 |-->_2
+_1 |-->_1<when> _1 identifier
+_1 |-->_1<when> _1 integer
+_1 |-->_1<when> _1 real
+_1 |-->_1`rhs
+
+lhs::
+_1 = _2 |-->_1
+_1 |-->_1<when> _1 identifier
+_1 |-->_1<when> _1 integer
+_1 |-->_1<when> _1 real
+_1 |-->_1`lhs
+
+divideBy::
+- _1 |-->-_1`divideBy
++ _1 |-->_1`divideBy
+_1 - _2 |-->_1`divideBy - _2`divideBy
+_1 + _2 |-->_1`divideBy + _2`divideBy
+_1 * 1 |-->_1`divideBy
+1 * _1 |-->_1`divideBy
+_1 * _2 |-->_1<when> _2 _90
+_1 * _2 |-->_2<when> _1 _90
+_1 * _2 |-->(_1`divideBy)*_2
+_1 / 1 |-->_1`divideBy
+1 / _2 |-->1/(_2*_90)
+_1 / _2 |-->(_1`divideBy)/_2
+( _1 ) |-->(_1`divideBy)
+
+
+Ð _{ _1 } _2 |-->MathLib.differential(lambda _1 : double in _2)/_90
+
+† _1 |-->(_1->sqrt())/_90
+
+_1 ^{ _2 } |-->(_1->pow(_2))/_90
+_1 ( _2 ) |-->_1(_2)/_90
+_1 ´ |-->(_1´)/_90
+
+
+_1 |-->_1`divideBy<when> _1 basicExpression
+_1 |-->_1`divideBy<when> _1 factorExpression
+_1 |-->_1`divideBy<when> _1 factor2Expression
+_1 |-->_1`divideBy<when> _1 logicalExpression
+_1 |-->_1`divideBy<when> _1 equalityExpression
+_1 |-->_1`divideBy<when> _1 additiveExpression
+_1 |-->_1`divideBy<when> _1 expression
+_1 |-->_1/_90
+
+
+cancel::
+- _1 |-->-_1`cancel
++ _1 |-->_1`cancel
+_1 - _2 |-->_1`cancel - _2`cancel
+_1 + _2 |-->_1`cancel + _2`cancel
+_1 * 1 |-->_1`cancel
+1 * _1 |-->_1`cancel
+_1 * _2 |-->(_1`divideBy)*_2
+_1 / 1 |-->_1`cancel
+1 / _2 |-->1/_2
+_1 / _2 |-->(_1`divideBy)/(_2`divideBy)
+
+( _1 ) |-->(_1`cancel)
+
+Ð _{ _1 } _2 |-->MathLib.differential(lambda _1 : double in _2)
+
+† _1 |-->_1->sqrt()
+
+_1 ^{ _2 } |-->_1->pow(_2)
+_1 ( _2 ) |-->_1(_2)
+_1 ´ |-->MathLib.differential(lambda x : double in _1)
+
+_1 |-->_1`cancel<when> _1 basicExpression
+_1 |-->_1`cancel<when> _1 factorExpression
+_1 |-->_1`cancel<when> _1 factor2Expression
+_1 |-->_1`cancel<when> _1 logicalExpression
+_1 |-->_1`cancel<when> _1 equalityExpression
+_1 |-->_1`cancel<when> _1 additiveExpression
+_1 |-->_1`cancel<when> _1 expression
+_1 |-->_1
+
+
+integrate::
+x |-->(x->pow(2))/2.0
+x ^{ 2 } |-->(x->pow(3))/3.0
+x ^{ 3 } |-->(x->pow(4))/4.0
+- x |-->-(x->pow(2))/2.0
+x ^{ -1 } |-->x->log()
+x ^{ _1 } |-->(x->pow(_1 + 1))/(_1 + 1)<when> _1 real
+e ^{ x } |-->MathLib.eValue()->pow(x)
+
+_1 ^{ _2 } |-->MathLib.indefiniteIntegral(lambda x : double in _1->pow(_2))->apply(x)
+
+( _1 ) |-->(_1`integrate)
+
+exp ( x ) |-->MathLib.eValue->pow(x)
+sin ( x ) |-->-1*(x->cos())
+cos ( x ) |-->x->sin()
+tan ( x ) |-->-1*(x->cos()->log())
+cot ( x ) |-->x->sin()->log()
+sec ( x ) |-->(x->sec() + x->tan())->log()
+cosec ( x ) |-->-1*((x->cosec() + x->cot())->log())
+
+sinh ( x ) |-->x->cosh()
+cosh ( x ) |-->x->sinh()
+tanh ( x ) |-->x->cosh()->log()
+coth ( x ) |-->x->sinh()->log()
+sech ( x ) |-->2*(MathLib.eValue->pow(x))->atan()
+cosech ( x ) |-->-2*(MathLib.eValue->pow(x))->acoth()
+
+log ( x ) |-->x*log(x) - x
+
+asin ( x ) |-->x*(x->asin()) + (1 - x*x)->sqrt()
+atan ( x ) |-->x*(x->atan()) - 0.5*(1 + x*x)->log()
+acos ( x ) |-->x*(x->acos()) - (1 - x*x)->sqrt()
+acot ( x ) |-->x*(x->acot()) + 0.5*(1 + x*x)->log()
+
+asinh ( x ) |-->x*(MathLib.asinh(x)) - (x*x + 1)->sqrt()
+acosh ( x ) |-->x*(MathLib.acosh(x)) - (x*x - 1)->sqrt()
+atanh ( x ) |-->x*(MathLib.atanh(x)) + 0.5*(1 - x*x)->log()
+acoth ( x ) |-->x*(MathLib.acoth(x)) + 0.5*(x*x - 1)->log()
+
+_1 ( _2 ) |-->MathLib.indefiniteIntegral(lambda x : double in _1(_2))->apply(x)
+
+Ð _{ x } _1 |-->_1
+Ð _{ _1 } _2 |-->MathLib.indefiniteIntegral(lambda x : double in (_2`partialDiff))->apply(x)<action> _95 _1
+
+† _1 |-->MathLib.indefiniteIntegral(lambda x : double in (_1)->sqrt())->apply(x)
+
+_1 ´ |-->_1
+
+‡ _1 dx |-->MathLib.indefiniteIntegral(lambda x : double in (_1`integrate))->apply(x)
+‡ _1 _2 |-->MathLib.indefiniteIntegral(lambda _2`tail : double in (_1`integrate))->apply(x)
+
+- _1 |-->-(_1`integrate)
++ _1 |-->_1`integrate
+
+_1 + _2 |-->_1`integrate + _2`integrate
+_1 - _2 |-->_1`integrate - _2`integrate
+
+_1 = _2 |-->MathLib.indefiniteIntegral(lambda x : double in (if _1 = _2 then 1 else 0 endif))->apply(x)
+_1 /= _2 |-->MathLib.indefiniteIntegral(lambda x : double in (if _1 = _2 then 0 else 1 endif))->apply(x)
+
+x * x |-->(x->pow(3))/3
+
+_1 * x |-->_1*(x->pow(2)/2.0)<when> _1 real
+
+_1 * _2 |-->_1*(_2`integrate)<when> _1 real
+_1 * _2 |-->MathLib.indefiniteIntegral(lambda x : double in (_1*_2))->apply(x)
+
+_1 / _2 |-->(_1`integrate)/_2<when> _2 real
+_1 / _2 |-->MathLib.indefiniteIntegral(lambda x : double in (_1/_2))->apply(x)
+
+_1 |-->_1*x<when> _1 real
+
+_1 |-->_1`integrate<when> _1 basicExpression
+_1 |-->_1`integrate<when> _1 factorExpression
+_1 |-->_1`integrate<when> _1 factor2Expression
+_1 |-->_1`integrate<when> _1 logicalExpression
+_1 |-->_1`integrate<when> _1 equalityExpression
+_1 |-->_1`integrate<when> _1 additiveExpression
+_1 |-->_1`integrate<when> _1 expression
+_1 |-->_1`integrate<when> _1 expressionList
+
+_1 |-->MathLib.indefiniteIntegral(lambda x : double in _1)->apply(x)
+
+
+partialDiff::
+sin ( _1 ) |-->(_1)->cos()<when> _1 _95
+sin ( _1 ) |-->(_1`partialDiff) * ((_1)->cos())
+cos ( _1 ) |-->-1*((_1)->sin())<when> _1 _95
+cos ( _1 ) |-->(_1`partialDiff)*-1*((_1)->sin())
+tan ( _1 ) |-->(_1)->sec()->sec()<when> _1 _95
+tan ( _1 ) |-->(_1`partialDiff)*(_1)->sec()->sec()
+
+cot ( _1 ) |-->-1*((_1)->cosec()->cosec())<when> _1 _95
+cot ( _1 ) |-->-1*(_1`partialDiff)*((_1)->cosec()->cosec())
+sec ( _1 ) |-->((_1)->sec())*((_1)->tan())<when> _1 _95
+sec ( _1 ) |-->(_1`partialDiff)*((_1)->sec())*((_1)->tan())
+cosec ( _1 ) |-->-1*((_1)->cosec())*((_1)->cot())<when> _1 _95
+cosec ( _1 ) |-->-1*(_1`partialDiff)*((_1)->cosec())*((_1)->cot())
+
+sinh ( _1 ) |-->((_1)->cosh())<when> _1 _95
+sinh ( _1 ) |-->(_1`partialDiff)*((_1)->cosh())
+cosh ( _1 ) |-->((_1)->sinh())<when> _1 _95
+cosh ( _1 ) |-->(_1`partialDiff)*((_1)->sinh())
+tanh ( _1 ) |-->(_1)->sech()->sech()<when> _1 _95
+tanh ( _1 ) |-->(_1`partialDiff)*((_1)->sech()->sech())
+
+coth ( _1 ) |-->-1*((_1)->cosech()->cosech())<when> _1 _95
+coth ( _1 ) |-->-1*(_1`partialDiff)*((_1)->cosech()->cosech())
+sech ( _1 ) |-->-1*((_1)->sech())*((_1)->tanh())<when> _1 _95
+sech ( _1 ) |-->-1*(_1`partialDiff)*((_1)->sech())*((_1)->tanh())
+cosech ( _1 ) |-->-1*((_1)->cosech())*((_1)->coth())<when> _1 _95
+cosech ( _1 ) |-->-1*(_1`partialDiff)*((_1)->cosech())*((_1)->coth())
+
+log ( _1 ) |-->1/_1<when> _1 _95
+log ( _1 ) |-->(_1`partialDiff)/(_1)
+log10 ( _1 ) |-->1/(_1*(10->log()))<when> _1 _95
+log10 ( _1 ) |-->(_1`partialDiff)/((_1)*(10->log()))
+
+exp ( _1 ) |-->MathLib.eValue()->pow(_1)<when> _1 _95
+exp ( _1 ) |-->MathLib.eValue()->pow(_1) * _1`partialDiff
+
+asin ( _1 ) |-->1/(1 - (_1)->pow(2))->sqrt()<when> _1 _95
+asin ( _1 ) |-->(_1`partialDiff)/(1 - (_1)->pow(2))->sqrt()
+acos ( _1 ) |-->-1/(1 - (_1)->pow(2))->sqrt()<when> _1 _95
+acos ( _1 ) |-->-1 * (_1`partialDiff)/(1 - (_1)->pow(2))->sqrt()
+atan ( _1 ) |-->1/(1 + (_1)->pow(2))<when> _1 _95
+atan ( _1 ) |-->(_1`partialDiff)/(1 + (_1)->pow(2))
+
+asinh ( _1 ) |-->1/(_1*_1 + 1)->sqrt()<when> _1 _95
+asinh ( _1 ) |-->(_1`partialDiff)/(_1->pow(2) + 1)->sqrt()
+acosh ( _1 ) |-->1/(_1*_1 - 1)->sqrt()<when> _1 _95
+acosh ( _1 ) |-->(_1`partialDiff)/((_1)->pow(2) - 1)->sqrt()
+atanh ( _1 ) |-->1/(1 - _1*_1)<when> _1 _95
+atanh ( _1 ) |-->(_1`partialDiff)/(1 - (_1)->pow(2))
+
+( _1 ) |-->(_1`partialDiff)
+
+_1 * _1 |-->2*_1*(_1`partialDiff)
+_1 * _2 |-->_1*(_2`partialDiff)<when> _1 integer
+_1 * _2 |-->_1*(_2`partialDiff)<when> _1 real
+_1 * _2 |-->_1*(_2`partialDiff) + (_1`partialDiff)*_2
+
+_1 / _2 |-->((_1`partialDiff)*(_2) - (_1)*(_2`partialDiff))/(_2)->pow(2)
+
+_1 ´ |-->(_1`partialDiff)´
+Ð _{ x } _1 |-->Ð_{_95} (_1`differentiate)
+Ð _{ _1 } _2 |-->Ð_{_1} (_2`partialDiff)
+
+† _1 |-->0.5/(_1)->sqrt()<when> _1 _95
+† _1 |-->(0.5/(_1)->sqrt())*(_1`partialDiff)
+ 
+- _1 |-->-(_1`partialDiff)
++ _1 |-->_1`partialDiff
+
+_1 + _2 |-->_1`partialDiff + _2`partialDiff
+_1 - _2 |-->_1`partialDiff - _2`partialDiff
+
+e ^{ _1 } |-->MathLib.eValue()->pow(_1)<when> _1 _95
+e ^{ _1 } |-->(MathLib.eValue()->pow(_1))*_1`partialDiff
+
+‡ _1 _2 |-->_1<when> _2`tail _95
+‡ _1 _2 |-->MathLib.indefiniteIntegral(lambda _2`tail : double in (_1`partialDiff) )->apply(x)
+
+_1 |-->1<when> _1 _95
+_1 ^{ 2 } |-->2*_1<when> _1 _95 
+_1 ^{ 3 } |-->3*(_1)->pow(2)<when> _1 _95 
+_1 ^{ 2 } |-->2*(_1)*(_1`partialDiff)
+
+_1 ^{ _2 } |-->_2*_1->pow(_2 - 1)<when> _1 _95, _2 integer
+_1 ^{ _2 } |-->_2*_1->pow(_2 - 1)<when> _1 _95, _2 real
+_1 ^{ _2 } |-->_1->pow(_2)*(_2/_1 + (_2`partialDiff)*_1->log())<when> _1 _95
+_1 ^{ _2 } |-->_2*((_1)->pow(_2 - 1))*(_1`partialDiff)<when> _2 integer
+_1 ^{ _2 } |-->_2*((_1)->pow(_2 - 1))*(_1`partialDiff)<when> _2 real
+_1 ^{ _2 } |-->(_1)->pow(_2)*((_1`partialDiff)*_2/_1 + (_2`partialDiff)*(_1)->log())
+
+_1 |-->0<when> _1 integer
+_1 |-->0<when> _1 real
+_1 |-->0<when> _1`isIdentifier true
+
+_1 |-->_1`partialDiff<when> _1 basicExpression
+_1 |-->_1`partialDiff<when> _1 factorExpression
+_1 |-->_1`partialDiff<when> _1 factor2Expression
+_1 |-->_1`partialDiff<when> _1 logicalExpression
+_1 |-->_1`partialDiff<when> _1 equalityExpression
+_1 |-->_1`partialDiff<when> _1 additiveExpression
+_1 |-->_1`partialDiff<when> _1 expression
+_1 |-->_1`partialDiff<when> _1 expressionList
+_1 |-->MathLib.differential(lambda _95 : double in _1)
+
+
+
+
+differentiate::
+sin ( x ) |-->(x->cos())
+sin ( _1 ) |-->(_1`differentiate) * (_1->cos())
+cos ( x ) |-->-1 * (x->sin())
+cos ( _1 ) |-->(_1`differentiate) * -1 * (_1->sin())
+tan ( x ) |-->x->sec()->sec()
+tan ( _1 ) |-->(_1`differentiate) * (_1)->sec()->sec()
+
+cot ( x ) |-->-1 * x->cosec()->cosec()
+cot ( _1 ) |-->-1 * (_1`differentiate) * (_1)->cosec()->cosec()
+sec ( x ) |-->x->sec() * x->tan()
+sec ( _1 ) |-->(_1`differentiate) * (_1)->sec() * (_1)->tan()
+cosec ( x ) |-->-1 * x->cosec() * x->cot()
+cosec ( _1 ) |-->-1 * (_1`differentiate) * (_1)->cosec() * (_1)->cot()
+
+sinh ( x ) |-->x->cosh()
+sinh ( _1 ) |-->(_1`differentiate) * (_1->cosh())
+cosh ( x ) |-->x->sinh()
+cosh ( _1 ) |-->(_1`differentiate) * (_1->sinh())
+tanh ( x ) |-->x->sech()->sech()
+tanh ( _1 ) |-->(_1`differentiate) * (-1)->sech()->sech()
+
+coth ( x ) |-->-1 * x->cosech()->cosech()
+coth ( _1 ) |-->-1 * (_1`differentiate) * (_1)->cosech()->cosech()
+sech ( x ) |-->-1 * x->sech() * x->tanh()
+sech ( _1 ) |-->-1 * (_1`differentiate) * (_1)->sech() * (_1)->tanh()
+cosech ( x ) |-->-1 * x->cosech() * x->coth()
+cosech ( _1 ) |-->-1 * (_1`differentiate) * (_1)->cosech() * (_1)->coth()
+
+log ( x ) |-->1/x
+log ( _1 ) |-->(_1`differentiate) / (_1)
+log10 ( x ) |-->1/(x * 10->log())
+log10 ( _1 ) |-->(_1`differentiate) / (_1 * 10->log())
+exp ( x ) |-->x->exp()
+exp ( _1 ) |-->(_1)->exp() * (_1`differentiate)
+
+asin ( x ) |-->1/(1 - x*x)->sqrt()
+asin ( _1 ) |-->(_1`differentiate)/(1 - (_1)->sqr())->sqrt()
+acos ( x ) |-->-1/(1 - x*x)->sqrt()
+acos ( _1 ) |-->-1 * (_1`differentiate)/(1 - (_1)->sqr())->sqrt()
+atan ( x ) |-->1/(1 + x*x)
+atan ( _1 ) |-->(_1`differentiate)/(1 + (_1)->sqr())
+
+asinh ( x ) |-->1/(x*x + 1)->sqrt()
+asinh ( _1 ) |-->(_1`differentiate)/((_1)->sqr() + 1)->sqrt()
+acosh ( x ) |-->1/(x*x - 1)->sqrt()
+acosh ( _1 ) |-->(_1`differentiate)/((_1)->sqr() - 1)->sqrt()
+atanh ( x ) |-->1/(1 - x*x)
+atanh ( _1 ) |-->(_1`differentiate)/(1 - (_1)->sqr())
+
+( _1 ) |-->(_1`differentiate)
+
+x * x |-->2*x 
+_1 * x |-->_1<when> _1 integer
+x * _1 |-->_1<when> _1 integer
+_1 * x |-->_1<when> _1 real
+x * _1 |-->_1<when> _1 real
+_1 * x |-->_1 + (_1`differentiate)*x
+x * _1 |-->_1 + (_1`differentiate)*x
+
+_1 * _1 |-->2*_1*(_1`differentiate)
+
+_1 * _2 |-->_1*(_2`differentiate)<when> _1 integer
+_1 * _2 |-->_1*(_2`differentiate)<when> _1 real
+_1 * _2 |-->_1*(_2`differentiate) + (_1`differentiate)*_2
+
+_1 / _2 |-->((_1`differentiate)*(_2) - _1*(_2`differentiate))/(_2)->pow(2)
+
+_1 ´ |-->_1`diff2
+ 
+Ð _{ x } _1 |-->_1`diff2
+Ð _{ _1 } _2 |-->MathLib.differential(lambda x : double in (_2`partialDiff))<action> _95 _1
+
+† x |-->0.5/(x->sqrt())
+† _1 |-->(0.5/(_1)->sqrt())*(_1`differentiate)
+ 
+- _1 |-->-(_1`differentiate)
++ _1 |-->_1`differentiate
+
+_1 + _2 |-->_1`differentiate + _2`differentiate
+_1 - _2 |-->_1`differentiate - _2`differentiate
+
+‡ _1 dx |-->_1
+‡ _1 _2 |-->MathLib.indefiniteIntegral(lambda _2`tail : double in (_1`differentiate))->apply(x)
+
+e ^{ x } |-->MathLib.eValue->pow(x)
+
+e ^{ _1 } |-->(MathLib.eValue()->pow(_1)) * (_1`differentiate)
+
+x |-->1
+x ^{ 2 } |-->2 * x 
+x ^{ 3 } |-->3*(x->pow(2)) 
+
+_1 ^{ 2 } |-->2 * (_1) * (_1`differentiate)
+x ^{ _2 } |-->_2 * x->pow(_2 - 1)<when> _2 integer
+x ^{ _2 } |-->_2 * x->pow(_2 - 1)<when> _2 real
+
+_1 ^{ _2 } |-->MathLib.differential(lambda x : double in (_1)->pow(_2))
+
+_1 |-->0<when> _1 integer
+_1 |-->0<when> _1 real
+_1 |-->_1`differentiate<when> _1 basicExpression
+_1 |-->_1`differentiate<when> _1 factorExpression
+_1 |-->_1`differentiate<when> _1 factor2Expression
+_1 |-->_1`differentiate<when> _1 logicalExpression
+_1 |-->_1`differentiate<when> _1 equalityExpression
+_1 |-->_1`differentiate<when> _1 additiveExpression
+_1 |-->_1`differentiate<when> _1 expression
+_1 |-->_1`differentiate<when> _1 expressionList
+_1 |-->1<when> _1 identifier
+_1 |-->_1
+
+
+
+
+diff2::
+sin ( x ) |-->(-1 * x->sin())
+sin ( _1 ) |-->(_1`differentiate)->pow(2) * -1 * _1->sin() + (_1`diff2) * (_1->cos())
+cos ( x ) |-->(-1 * x->cos())
+cos ( _1 ) |-->(_1`differentiate)->pow(2) * -1 * _1->cos() - (_1`diff2) * _1->sin()
+sinh ( _1 ) |-->(_1`differentiate)->pow(2) * (-1->sinh()) + (_1`diff2) * (_1->cosh())
+cosh ( _1 ) |-->(_1`differentiate)->pow(2) * _1->cosh() + (_1`diff2) * (_1->sinh())
+log ( _1 ) |-->(_1`diff2)/(_1) - (_1`differentiate)->pow(2)/(_1)->pow(2)
+exp ( _1 ) |-->(_1->exp()) * ((_1`differentiate)->pow(2) + (_1`diff2))
+( _1 ) |-->(_1`diff2)
+
+_1 * _2 |-->_1*(_2`diff2)<when> _1 integer
+_1 * _2 |-->_1*(_2`diff2)<when> _1 real
+_1 * _2 |-->_1*(_2`diff2) + 2*(_1`differentiate)*(_2`differentiate) + (_1`diff2)*_2
+ 
+_1 + _2 |-->_1`diff2 + _2`diff2
+_1 - _2 |-->_1`diff2 - _2`diff2
+
+e ^{ _1 } |-->(_1)->exp() * ((_1`diff2) + (_1`differentiate)->pow(2))
+_1 ^{ 2 } |-->2 * (_1`diff2)
+_1 ^{ _2 } |-->_2 * (_2 - 1) * (_1->pow( _2 - 2)) * (_1`diff2)
+
+_1 |-->0<when> _1 integer
+_1 |-->0<when> _1 real
+_1 |-->_1`diff2<when> _1 basicExpression
+_1 |-->_1`diff2<when> _1 factorExpression
+_1 |-->_1`diff2<when> _1 factor2Expression
+_1 |-->_1`diff2<when> _1 logicalExpression
+_1 |-->_1`diff2<when> _1 equalityExpression
+_1 |-->_1`diff2<when> _1 additiveExpression
+_1 |-->_1`diff2<when> _1 expression
+_1 |-->_1`diff2<when> _1 expressionList
+_1 |-->0<when> _1 identifier
+_1 |-->_1
+
+
+diff3::
+sin ( x ) |-->-1*(x->cos())
+sin ( _1 ) |-->((_1)->cos())*(_1`diff3) - ((_1)->cos(_1))*(_1`differentiate)->pow(3) - 3*(_1`differentiate)*(_1`diff2)*((_1)->sin())
+
+cos ( x ) |-->x->sin()
+cos ( _1 ) |-->((_1)->sin())*(_1`differentiate)->pow(3) - ((_1)->sin())*(_1`diff3) - 3*(_1`differentiate)*(_1`diff2)*((_1)->cos())
+
+sinh ( x ) |-->x->cosh()
+cosh ( x ) |-->x->sinh()
+
+log ( x ) |-->1/(2 * x->pow(3))
+
+exp ( x ) |-->x->exp() 
+exp ( _1 ) |-->((_1)->exp())*((_1`diff3) + (_1`differentiate)->pow(3) + 3*(_1`differentiate)*(_1`diff2))
+
+( _1 ) |-->(_1`diff3)
+
+_1 ´ |-->MathLib.differential(lambda x : double in (_1`diff3))
+
+_1 * _2 |-->_1*(_2`diff3)<when> _1 integer
+_1 * _2 |-->_1*(_2`diff3)<when> _1 real
+_1 * _2 |-->_1*(_2`diff3) + 3*(_1`differentiate)*(_2`diff2) + 3*(_1`diff2)*(_2`differentiate) + (_1`diff3)*_2
+ 
+_1 + _2 |-->_1`diff3 + _2`diff3
+_1 - _2 |-->_1`diff3 - _2`diff3
+
+e ^{ x } |-->x->exp() 
+e ^{ _1 } |-->((_1)->exp())*((_1`diff3) + (_1`differentiate)->pow(3) + 3*(_1`differentiate)*(_1`diff2))
+
+x |-->0
+x ^{ 2 } |-->0
+x ^{ 3 } |-->6
+x ^{ _1 } |-->_1*(_1 - 1)*(_1 - 2)*(x->pow(_1 - 3))<when> _1 integer
+x ^{ _1 } |-->_1*(_1 - 1)*(_1 - 2)*(x->pow(_1 - 3))<when> _1 real
+_1 ^{ 2 } |-->2*(_1*(_1`diff3) + 3*(_1`differentiate)*(_1`diff2))
+
+_1 |-->0<when> _1 integer
+_1 |-->0<when> _1 real
+_1 |-->_1`diff3<when> _1 basicExpression
+_1 |-->_1`diff3<when> _1 factorExpression
+_1 |-->_1`diff3<when> _1 factor2Expression
+_1 |-->_1`diff3<when> _1 logicalExpression
+_1 |-->_1`diff3<when> _1 equalityExpression
+_1 |-->_1`diff3<when> _1 additiveExpression
+_1 |-->_1`diff3<when> _1 expression
+_1 |-->_1`diff3<when> _1 expressionList
+_1 |-->0<when> _1 identifier
+_1 |-->_1
+
+
+
+
+isIdentifier::
+g{ _1 } |-->true
+
+_1 ( _2 ) |-->false
+_1 ( ) |-->false
+
+( _1 ) |-->_1`isIdentifier
+
+_1 |-->_1`isIdentifier<when> _1 basicExpression
+_1 |-->_1`isIdentifier<when> _1 factorExpression
+_1 |-->_1`isIdentifier<when> _1 factor2Expression
+_1 |-->_1`isIdentifier<when> _1 logicalExpression
+_1 |-->_1`isIdentifier<when> _1 equalityExpression
+_1 |-->_1`isIdentifier<when> _1 additiveExpression
+_1 |-->_1`isIdentifier<when> _1 expression
+
+_1 |-->true<when> _1 identifier
+_1 |-->false
+
+
+bracketed::
+( _1 ) |-->true
+
+_1 |-->_1`bracketed<when> _1 basicExpression
+_1 |-->_1`bracketed<when> _1 factorExpression
+_1 |-->_1`bracketed<when> _1 factor2Expression
+_1 |-->_1`bracketed<when> _1 logicalExpression
+_1 |-->_1`bracketed<when> _1 equalityExpression
+_1 |-->_1`bracketed<when> _1 additiveExpression
+_1 |-->_1`bracketed<when> _1 expression
+
+_1 |-->false
+
+
+randomParameters::
+N ( _1 ) |-->Normal(_1)
+Bernoulli ( _1 ) |-->Bernoulli(_1)
+Binom ( _1 ) |-->Binomial(_1)
+U ( ) |-->Uniform(0.0, 1.0)
+U ( _1 ) |-->Uniform(_1)
+Poisson ( _1 ) |-->Poisson(_1)
+LogNorm ( _1 ) |-->LogNormal(_1)
+
+( _1 ) |-->_1`randomParameters
+
+_1 |-->_1`randomParameters<when> _1 basicExpression
+_1 |-->_1`randomParameters<when> _1 factorExpression
+_1 |-->_1`randomParameters<when> _1 factor2Expression
+_1 |-->_1`randomParameters<when> _1 logicalExpression
+_1 |-->_1`randomParameters<when> _1 equalityExpression
+_1 |-->_1`randomParameters<when> _1 additiveExpression
+_1 |-->_1`randomParameters<when> _1 expression
+
+_1 |-->0
+_* |-->0
+

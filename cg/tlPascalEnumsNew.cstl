@@ -1,0 +1,55 @@
+simpleType::
+_1 |-->_1
+
+identifier::
+_1 |-->_1
+
+identifierList::
+_* |-->_*
+_1 |-->_1
+
+scalarType::
+_* |-->_*
+
+type_::
+_1 |-->_1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+typeDefinition::
+_1 = _3  |-->enumeration _1 { _3`subruleset14 } 
+
+singleElement12::
+( _2 )  |-->_2`subSourceF11
+
+subruleset14::
+_1  |-->_1`singleElementF13
+
+subSourceF11::
+_* |-->_*`seq2subruleset10
+
+seq2subruleset10::
+, |-->;
+_1  |-->literal _1 
+_0 |-->_0
+
+singleElementF13::
+_1 |-->_1`singleElement12
+
+
+

@@ -1,0 +1,131 @@
+identifier::
+_1 |-->_1
+
+expression::
+_1 |-->_1
+
+additiveExpression::
+_1 |-->_1
+
+factorExpression::
+_1 |-->_1
+
+equalityExpression::
+_1 |-->_1
+
+basicExpression::
+_1 |-->_1
+
+factor2Expression::
+_1 |-->_1
+
+logicalExpression::
+_1 |-->_1
+
+
+
+
+
+
+
+
+subSourceF49::
+_1 |-->_1
+
+
+
+
+
+
+
+
+
+
+subSourceF61::
+_1 |-->_1 
+
+subSourceF69::
+_1 |-->_1 
+
+factor2Expression::
+_1 ->reject ( _4 | _6 )  |-->[ _4`subruleset40 for _4`subruleset43 in _1`subruleset45 _6`subruleset54 ] 
+_1 ->select ( _4 | _6 )  |-->[ _4`subruleset57 for _4`subruleset60 in _1`subruleset62 _6`subruleset67 ] 
+_1 ->collect ( _4 | _6 )  |-->[ _6`subruleset70 for _4`subruleset73 in _1`subruleset75 ] 
+
+subSourceF44::
+_1 |-->_1 
+
+subSourceF66::
+_1  |-->if _1`subruleset65 
+
+subSourceF42::
+_1 |-->_1
+
+subSourceF64::
+_1 |-->_1 
+
+subruleset50::
+_1  |-->_1`subSourceF49
+
+subruleset52::
+_1  |-->_1`subSourceF51
+
+subruleset73::
+_1  |-->_1`subSourceF72
+
+subruleset54::
+_1  |-->_1`subSourceF53
+
+subruleset75::
+_1  |-->_1`subSourceF74
+
+subruleset57::
+_1  |-->_1`subSourceF56
+
+subSourceF72::
+_1 |-->_1
+
+subSourceF51::
+_1  |-->not _1`subruleset50 
+
+subSourceF59::
+_1 |-->_1
+
+subSourceF56::
+_1 |-->_1
+
+subruleset70::
+_1  |-->_1`subSourceF69
+
+subSourceF74::
+_1 |-->_1 
+
+subSourceF53::
+_1  |-->if _1`subruleset52 
+
+subruleset60::
+_1  |-->_1`subSourceF59
+
+subruleset40::
+_1  |-->_1`subSourceF39
+
+subruleset62::
+_1  |-->_1`subSourceF61
+
+subruleset43::
+_1  |-->_1`subSourceF42
+
+subruleset65::
+_1  |-->_1`subSourceF64
+
+subruleset45::
+_1  |-->_1`subSourceF44
+
+subruleset67::
+_1  |-->_1`subSourceF66
+
+subSourceF39::
+_1 |-->_1
+
+
+

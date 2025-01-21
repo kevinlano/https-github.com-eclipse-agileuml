@@ -1,0 +1,323 @@
+structuredStatement::
+_1 |-->_1
+
+conditionalStatement::
+_1 |-->_1
+
+identifier::
+_1 |-->_1
+
+unsignedNumber::
+_1 |-->_1
+
+expression::
+_1 |-->_1
+
+signedFactor::
+_1 |-->_1
+
+simpleExpression::
+_1 |-->_1
+
+statements::
+_1 |-->_1
+_* |-->_*
+
+unsignedInteger::
+_1 |-->_1
+
+repetetiveStatement::
+_1 |-->_1
+
+simpleStatement::
+_1 |-->_1
+
+unlabelledStatement::
+_1 |-->_1
+
+actualParameter::
+_1 |-->_1
+
+forList::
+_* |-->_*
+
+statement::
+_1 |-->_1
+
+variable::
+_1 |-->_1
+
+parameterList::
+_1 |-->_1
+
+term::
+_1 |-->_1
+
+factor::
+_1 |-->_1
+
+finalValue::
+_1 |-->_1
+
+initialValue::
+_1 |-->_1
+
+unsignedConstant::
+_1 |-->_1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+subSourceF62::
+_1  |-->_1`concatrule61 
+
+compoundStatement::
+begin _* end  |-->( _*`seq2subruleset78 ) 
+
+subSourceF25::
+_1 |-->_1 
+
+subSourceF69::
+_1 |-->_1
+
+subSourceF22::
+_1  |-->( _1`subruleset21 ) 
+
+subSourceF66::
+_1  |-->_1`concatrule65 
+
+subSourceF20::
+_1  |-->_1`subruleset19 ->display ( ) 
+
+subruleset51::
+_1  |-->_1`subSourceF50
+
+subSourceF29::
+_1  |-->_1`concatrule28 
+
+subruleset53::
+_1  |-->_1`subSourceF52
+
+subruleset56::
+_1  |-->_1`subSourceF55
+
+subruleset13::
+_1  |-->_1 
+
+subruleset16::
+_1  |-->_1`subSourceF15
+
+subruleset59::
+_1  |-->_1`subSourceF58
+
+subruleset19::
+_1  |-->_1`subSourceF18
+
+subSourceF50::
+_1  |-->( _1`subruleset49 ) 
+
+subSourceF112::
+_1 := c         |-->_1`subruleset111 
+
+repeatStatement::
+repeat _2 until _4  |-->( _2`subruleset41 ; while _4`subruleset47 do _2`subruleset51 ) 
+
+subSourceF58::
+_1 |-->_1 
+
+subSourceF15::
+_1 |-->_1 
+
+subSourceF55::
+_1 |-->_1 
+
+subSourceF114::
+_1  |-->_1`subruleset113 := c 
+
+subSourceF52::
+_*  |-->self . _1 
+
+subruleset70::
+_1 := _3  |-->_1`subSourceF69
+
+subruleset63::
+_1  |-->_1`subSourceF62
+
+subSourceF18::
+_1 |-->_1 
+
+subruleset21::
+_1  |-->_1`subSourceF20
+
+nestedSfunc103::
+10 |-->1
+15 |-->1
+20 |-->10
+_* |-->1
+
+subruleset23::
+_1  |-->_1`subSourceF22
+
+subruleset67::
+_1  |-->_1`subSourceF66
+
+procedureStatement::
+writeln  ( _3 )  |-->execute _3`subruleset23 
+_1 ( _3 )  |-->_1`subruleset53 ( _3`subruleset56 ) 
+
+subruleset26::
+_1  |-->_1`subSourceF25
+
+concatrule35::
+_* |-->_*`concatruleset34
+
+subruleset110::
+_1 to _3  |-->_3`subSourceF109
+
+subSourceF40::
+_1  |-->( _1`subruleset39 ) 
+
+subruleset111::
+_1  |-->_1 
+
+concatruleset27::
+_0 |-->_0
+
+concatruleset64::
+_0 |-->_0
+
+subruleset115::
+_1  |-->_1`subSourceF114
+
+assignmentStatement::
+_1 := _3  |-->_1`subruleset13 := _3`subruleset16 
+
+subruleset113::
+_1  |-->_1`subSourceF112
+
+subSourceF48::
+_1  |-->_1 
+
+subSourceF107::
+_1 |-->_1 
+
+subSourceF46::
+_1  |-->not _1`subruleset45 
+
+subSourceF109::
+_1  |-->_1`subruleset105 .. _1`subruleset108 
+
+subSourceF44::
+_1  |-->( _1`subruleset43 ) 
+
+subSourceF104::
+_1 |-->_1`nestedSfunc103 
+
+subSourceF42::
+_1  |-->_1 
+
+subruleset72::
+_1  |-->_1`subSourceF71
+
+subruleset30::
+_1  |-->_1`subSourceF29
+
+subruleset75::
+_1 := _3  |-->_3`subSourceF74
+
+subruleset33::
+_1  |-->_1`subSourceF32
+
+subruleset77::
+_1  |-->_1`subSourceF76
+
+concatruleset60::
+_0 |-->_0
+
+subruleset37::
+_1  |-->_1`subSourceF36
+
+seq2subruleset78::
+_1  |-->_1`subruleset72 := _1`subruleset77 
+_0 |-->_0
+
+subruleset39::
+_1  |-->_1`subSourceF38
+
+subSourceF71::
+_1  |-->_1`subruleset70 
+
+concatrule28::
+_* |-->_*`concatruleset27
+
+concatruleset34::
+_0 |-->_0
+
+subSourceF36::
+_1  |-->_1`concatrule35 
+
+forStatement::
+for _2 := _4 do _6  |-->for _2 : _4`subruleset110 do _6`subruleset115 
+
+ifStatement::
+if _2 then _4 else _6  |-->if _2`subruleset59 then _4`subruleset63 else _6`subruleset67 
+if _2 then _4  |-->if _2`subruleset33 then _4`subruleset37 else skip 
+
+subSourceF32::
+_1 |-->_1 
+
+subSourceF76::
+_1  |-->_1`subruleset75 
+
+subSourceF74::
+_1 |-->_1
+
+whileStatement::
+while _2 do _4  |-->while _2`subruleset26 do _4`subruleset30 
+
+subruleset41::
+_1  |-->_1`subSourceF40
+
+subruleset43::
+_1  |-->_1`subSourceF42
+
+subSourceF38::
+_1  |-->_1 
+
+subruleset45::
+_1  |-->_1`subSourceF44
+
+subruleset47::
+_1  |-->_1`subSourceF46
+
+concatrule61::
+_* |-->_*`concatruleset60
+
+subruleset108::
+_1  |-->_1`subSourceF107
+
+subruleset49::
+_1  |-->_1`subSourceF48
+
+subruleset105::
+_1  |-->_1`subSourceF104
+
+concatrule65::
+_* |-->_*`concatruleset64
+
+
+

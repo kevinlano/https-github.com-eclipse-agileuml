@@ -1,0 +1,30 @@
+identifier::
+_1 |-->_1
+
+enumerationLiterals::
+_* |-->_*
+_1 |-->_1
+
+enumerationLiteral::
+_* |-->_*
+
+
+
+
+
+seq2ruleset5::
+_* |-->_*`seq2subruleset5
+
+seq2subruleset5::
+; |-->,
+literal _2  |-->_2 
+_0 |-->_0
+
+enumeration::
+enumeration _2 { _4 }  |-->_2 = ( _4`seq2ruleset5 ) 
+
+
+/* To reverse LHS[_i] |-->RHS[_i`fi] */
+/* RHS[_i] |-->LHS[_i`ri] where ri reverses fi */
+/* Likewise for _* and symbols */
+

@@ -1,0 +1,202 @@
+relationaloperator::
+_1 |-->_1
+
+actualParameter::
+_1 |-->_1
+
+parameterList::
+_1 |-->_1
+
+additiveoperator::
+_1 |-->_1
+
+elementList::
+_* |-->_*
+_1 |-->_1
+
+element::
+_1 |-->_1
+
+identifier::
+_1  |-->_1 
+
+identifierList::
+_1 |-->_1
+
+expression::
+_1 <=  _3  |-->_1 <= _3 <when> _1 simpleExpression
+_1 <=  _3  |-->_3 ->includesAll ( _1 ) <when> _1 set_
+_1 in  _3  |-->_3 ->includes ( _1 ) 
+_1 =  _3  |-->_1 = _3 
+_1  |-->_1 
+
+functionDesignator::
+_1 ( _3 )  |-->_3 _1`nestedSfunc40 ( ) 
+
+seq2ruleset38::
+_* |-->_*`seq2subruleset37
+
+signedFactor::
++ _2  |-->_2 
+- _2  |-->- _2 
+_1 |-->_1 
+
+set_::
+[ _* ]  |-->Set { _*`seq2ruleset38 } 
+_1 |-->_1
+
+
+simpleExpression::
+_1 or  _3  |-->_1 or _3 
+_1 +  _3  |-->_1 + _3 <when> _1 term
+_1 +  _3  |-->_1 ->union ( _3 ) <when> _1 set_
+_1 -  _3  |-->_1 - _3 
+_1  |-->_1 
+
+unsignedInteger::
+_1 |-->_1 
+
+nestedSfunc32::
+nil |-->null
+_1 |-->_1
+_* |-->null
+
+bool_::
+_1 |-->_1 
+
+nestedSfunc40::
+sin |-->->sin
+cos |-->->cos
+arctan |-->->atan
+ln |-->->log
+_* |-->->sin
+
+variable::
+_1 [ _3 ]  |-->_1 ->at ( "" + _3 ) 
+_1 [ _3 , _5 ]  |-->_1 ->at ( "" + _3 ) ->at ( "" + _5 ) 
+_1 . _3  |-->_1 . _3 
+_1 ^  |-->! _1 <when> _1 identifier
+@ _2  |-->? _2 
+_1  |-->_1 
+
+term::
+_1 div _3  |-->_1 div _3 
+_1 mod _3  |-->_1 mod _3 
+_1 and _3  |-->_1 & _3 
+_1 * _3  |-->_1 * _3 <when> _1 signedFactor
+_1 * _3  |-->_1 ->intersection ( _3 ) <when> _1 set_
+_1  |-->_1 
+
+seq2subruleset37::
+_1  |-->_1 
+_0 |-->_0
+
+factor::
+( _2 )  |-->( _2 ) 
+not _2  |-->not _2 
+_1 |-->_1 
+
+
+unsignedConstant::
+nil |-->null
+_1 |-->_1
+_* |-->null
+
+
+unsignedNumber::
+_1 |-->_1
+
+identifierList::
+_1 |-->_1
+
+
+assignmentStatement::
+_* |-->_*
+
+
+compoundStatement::
+_* |-->_*
+
+statements::
+_1 |-->_1
+
+
+parameterGroup::
+_1 |-->_1
+_* |-->_*
+
+bool_::
+_1 |-->_1
+
+formalParameterList::
+_1 |-->_1
+_* |-->_*
+
+simpleStatement::
+_1 |-->_1
+
+formalParameterSection::
+_1 |-->_1
+
+unlabelledStatement::
+_1 |-->_1
+
+statement::
+_1 |-->_1
+
+variable::
+_1 |-->_1
+
+typeIdentifier::
+_1 |-->_1
+
+block::
+_1 |-->_1
+
+
+resultType::
+_1 |-->_1
+
+
+unsignedReal::
+_1 |-->_1
+
+
+functionDeclaration::
+function _2 : _4 ; _6  |-->operation _2 ( ) : _4`subruleset19 pre: true post: true activity: _6`subruleset28 ; 
+
+function _2 _3  : _5 ; _7  |-->operation _2 _3 : _5`subruleset19 pre: true post: true activity: _7`subruleset28 ; 
+
+
+subSourceF18::
+_1 |-->_1
+
+subSourceF21::
+_1 |-->_1
+
+subSourceF23::
+_1  |-->_1`subruleset22 
+
+subSourceF25::
+_1  |-->_1`subruleset24 
+
+subSourceF27::
+begin _2 end  |-->return _2`subruleset26 
+
+subruleset19::
+_1  |-->_1`subSourceF18
+
+subruleset22::
+_1 := _3  |-->_3`subSourceF21
+
+subruleset24::
+_1  |-->_1`subSourceF23
+
+subruleset26::
+_1  |-->_1`subSourceF25
+
+subruleset28::
+_1  |-->_1`subSourceF27
+
+
+
